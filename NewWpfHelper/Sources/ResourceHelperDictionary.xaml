@@ -1,0 +1,87 @@
+﻿<ResourceDictionary x:Class="WpfHelper.Sources.ResourceHelperDictionary" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:wpf="clr-namespace:NGMP.WPF">
+
+    <ImageSource x:Key="Error">pack://application:,,,/WpfHelper;component/Resources/ErrorNotification.png</ImageSource>
+    <ImageSource x:Key="Warn">pack://application:,,,/WpfHelper;component/Resources/WarnNotification.png</ImageSource>
+    <ImageSource x:Key="Info">pack://application:,,,/WpfHelper;component/Resources/InfoNotification.png</ImageSource>
+
+    <!-- Use the StatusStyle like this:
+    
+    <ComboBox Style="{StaticResource StatusStyle}" ItemsSource="{Binding StatusBar.StatusList}" SelectedItem="{Binding StatusBar.SelectedStatus}" />
+    
+    "StatusBar" is the StatusBarAccessor object, declared in the DataContext -->
+    <Style x:Key="StatusStyle" TargetType="{x: ComboBox}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Tag" Value="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"/>
+        <EventSetter Event="Loaded" Handler="EventSetter_OnHandler" />
+
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="wpf:StatusBarAccessor">
+                    <StackPanel Name="content" Orientation="Horizontal">
+                        <Image Name="Notification" Margin="2" Source="{x:Null}" Height="0" />
+                        <TextBlock Name="message" Margin="2" Text="{Binding Message}" />
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <!--<DataTrigger Binding="{Binding MessageStatusString}" Value="Info">
+                            <Setter TargetName="content" Property="Background" Value="LightBlue" />
+                        </DataTrigger>-->
+                        <DataTrigger Binding="{Binding MessageStatusString}" Value="Warn">
+                            <Setter TargetName="content" Property="Background" Value="Orange" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding MessageStatusString}" Value="Error">
+                            <Setter TargetName="content" Property="Background" Value="Red" />
+                            <Setter TargetName="message" Property="Foreground" Value="White" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding MissedStatus}" Value="Error">
+                            <Setter TargetName="Notification" Property="Source" Value="{StaticResource Error}" />
+                            <Setter TargetName="Notification" Property="Height" Value="20"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding MissedStatus}" Value="Warn">
+                            <Setter TargetName="Notification" Property="Source" Value="{StaticResource Warn}" />
+                            <Setter TargetName="Notification" Property="Height" Value="20"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid x:Name="gd" TextElement.Foreground="Black">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Margin="2" Grid.Column="0" Text="{Binding MessageStatusString}" HorizontalAlignment="Center" />
+                                    <TextBlock Margin="2" Grid.Column="1" Text="{Binding Message}" HorizontalAlignment="Stretch" />
+                                    <TextBlock Margin="2" Grid.Column="2" Text="{Binding MessageTime, StringFormat='HH:mm:ss'}" HorizontalAlignment="Stretch" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="ComboBoxItem.IsSelected" Value="True">
+                                        <Setter TargetName="gd" Property="Background" Value="Gray" />
+                                        <Setter TargetName="gd" Property="TextElement.Foreground" Value="White" />
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding MessageStatusString}" Value="Warn">
+                                        <Setter TargetName="gd" Property="Background" Value="Orange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MessageStatusString}" Value="Error">
+                                        <Setter TargetName="gd" Property="Background" Value="Red" />
+                                        <!--<Setter TargetName="gd" Property="Foreground" Value="White" />-->
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
