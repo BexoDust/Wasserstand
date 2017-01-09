@@ -31,7 +31,7 @@ xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="110" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Bitte wählen Sie den Zeitraum" Margin="5" Padding="5" />
@@ -134,7 +134,11 @@ xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
                     <sfchart:SfChart.PrimaryAxis>
                         <sfchart:DateTimeAxis LabelFormat="MM-yyyy" />
                     </sfchart:SfChart.PrimaryAxis>
-                    <sfchart:AreaSeries Label="Gesamt" ItemsSource="{Binding TransactionList}" XBindingPath="Date" YBindingPath="Total" />
+                    <sfchart:AreaSeries Label="Gesamt" ItemsSource="{Binding TransactionList}" XBindingPath="Date" YBindingPath="Total">
+                        <sfchart:AreaSeries.Trendlines>
+                            <sfchart:Trendline />
+                        </sfchart:AreaSeries.Trendlines>
+                    </sfchart:AreaSeries>
                 </sfchart:SfChart>
             </Grid>
         </PivotItem>
